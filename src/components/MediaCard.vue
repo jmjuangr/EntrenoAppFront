@@ -6,11 +6,7 @@
     <v-card-actions>
       <v-btn :to="`/detalle/${type}/${item.id}`" color="primary"> {{ $t('view_more') }}</v-btn>
 
-      <v-btn
-        icon
-        @click="store.toggleFavorite(type, item.id)"
-        :color="item.favorite ? 'red' : 'grey'"
-      >
+      <v-btn icon @click="toggleFavorite" :color="item.favorite ? 'red' : 'grey'">
         <v-icon>{{ item.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
       </v-btn>
     </v-card-actions>
@@ -24,8 +20,12 @@ import type { MediaItem } from '../store/media'
 
 const props = defineProps<{
   item: MediaItem
-  type: 'movie' | 'series'
+  type: 'movies' | 'series'
 }>()
 
 const store = useMediaStore()
+
+function toggleFavorite() {
+  store.toggleFavorite(props.type, props.item.id)
+}
 </script>

@@ -36,7 +36,7 @@
           <v-card-title>{{ movie.title }}</v-card-title>
           <v-card-text>{{ movie.description }}</v-card-text>
           <v-card-actions>
-            <v-btn icon color="error" @click="store.removeMovie(movie.id)">
+            <v-btn icon color="error" @click="removeMedia('movies', movie.id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-card-actions>
@@ -53,7 +53,7 @@
           <v-card-title>{{ serie.title }}</v-card-title>
           <v-card-text>{{ serie.description }}</v-card-text>
           <v-card-actions>
-            <v-btn icon color="error" @click="store.removeSeries(serie.id)">
+            <v-btn icon color="error" @click="removeMedia('series', serie.id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-card-actions>
@@ -69,32 +69,51 @@ import { useMediaStore } from '../store/media'
 
 const store = useMediaStore()
 
-const type = ref<'movie' | 'series'>('movie')
+const type = ref<'movies' | 'series'>('movies')
 const title = ref('')
 const description = ref('')
 const image = ref('')
 const favorite = ref(false)
 
+// Antes: addMovie / addSeries solo en memoria
+/*
 function addMoviesSeries() {
+  ...
+  if (type.value === 'movie') {
+    store.addMovie(newItem)
+  } else {
+    store.addSeries(newItem)
+  }
+}
+*/
+
+//  Ahora: uso store.addMedia que guarda en backend
+async function addMoviesSeries() {
   if (!title.value || !description.value || !image.value) return
 
+  const currentList = type.value === 'movies' ? store.movies : store.series
+  const ids = currentList.map((m) => Number(m.id))
+  const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1
+
   const newItem = {
+    id: newId.toString(),
     title: title.value,
     description: description.value,
     image: image.value,
     favorite: favorite.value,
   }
 
-  if (type.value === 'movie') {
-    store.addMovie(newItem)
-  } else {
-    store.addSeries(newItem)
-  }
+  await store.addMedia(type.value, newItem)
+  await store.fetchMedia()
 
-  // Limpiar formulario
   title.value = ''
   description.value = ''
   image.value = ''
   favorite.value = false
+}
+
+// nueva función para borrar
+async function removeMedia(type: 'movies' | 'series', id: number) {
+  await store.deleteMedia(type, id)
 }
 </script>

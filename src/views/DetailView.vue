@@ -7,10 +7,7 @@
       <v-col cols="12" md="8">
         <h2>{{ media.title }}</h2>
         <p>{{ media.description }}</p>
-        <v-btn
-          @click="store.toggleFavorite(type, media.id)"
-          :color="media.favorite ? 'red' : 'grey'"
-        >
+        <v-btn @click="toggleFavorite()" :color="media.favorite ? 'red' : 'grey'">
           {{ media.favorite ? $t('remove_from_favorites') : $t('add_to_favorites') }}
         </v-btn>
       </v-col>
@@ -25,32 +22,34 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useMediaStore } from '../store/media'
 
 const route = useRoute()
-const store = useMediaStore()
 
-const type = computed(() => route.params.type as 'movie' | 'series')
+const type = computed(() => route.params.type as 'movies' | 'series')
 const id = computed(() => Number(route.params.id))
 
 const media = ref<any>(null)
 
-const loadMedia = () => {
-  if (type.value === 'movie') {
-    media.value = store.getMovieById(id.value) || null
-  } else if (type.value === 'series') {
-    media.value = store.getSeriesById(id.value) || null
-  } else {
+async function loadMediaDirecto() {
+  try {
+    const res = await fetch(`http://localhost:3001/${type.value}/${id.value}`)
+    if (!res.ok) throw new Error()
+    media.value = await res.json()
+  } catch {
     media.value = null
   }
 }
 
-onMounted(async () => {
-  if (store.movies.length === 0 || store.series.length === 0) {
-    await store.fetchMedia()
-  }
-  loadMedia()
-})
+async function toggleFavorite() {
+  await fetch(`http://localhost:3001/${type.value}/${id.value}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ favorite: !media.value.favorite }),
+  })
+  await loadMediaDirecto()
+}
 
-watch([type, id], loadMedia)
+watch([type, id], loadMediaDirecto)
+
+onMounted(loadMediaDirecto)
 </script>

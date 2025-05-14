@@ -6,7 +6,7 @@
     <h2 class="text-h5 mb-2">{{ $t('movies') }}</h2>
     <v-row>
       <v-col v-for="movie in store.favoriteMovies" :key="movie.id" cols="12" md="4">
-        <MovieCard :item="movie" type="movie" />
+        <MovieCard :item="movie" type="movies" />
       </v-col>
     </v-row>
   </div>
@@ -37,9 +37,9 @@ import { onMounted } from 'vue'
 
 const store = useMediaStore()
 
-onMounted(() => {
+onMounted(async () => {
   if (store.movies.length === 0 || store.series.length === 0) {
-    store.fetchMedia()
+    await store.fetchMedia()
   }
 })
 </script>

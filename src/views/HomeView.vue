@@ -65,7 +65,7 @@
       </h2>
       <v-row>
         <v-col v-for="movie in filteredMovies" :key="'movie-' + movie.id" cols="12" md="4">
-          <MovieCard :item="movie" type="movie" />
+          <MediaCard :item="movie" type="movies" />
         </v-col>
       </v-row>
     </div>
@@ -80,7 +80,7 @@
       </h2>
       <v-row>
         <v-col v-for="serie in filteredSeries" :key="'series-' + serie.id" cols="12" md="4">
-          <MovieCard :item="serie" type="series" />
+          <MediaCard :item="serie" type="series" />
         </v-col>
       </v-row>
     </div>
@@ -98,7 +98,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
 import { useMediaStore } from '../store/media'
-import MovieCard from '../components/MediaCard.vue'
+import MediaCard from '../components/MediaCard.vue'
 import movieImage from '@/assets/img/movies.jpg'
 import seriesImage from '@/assets/img/series.jpg'
 
@@ -124,9 +124,9 @@ const latestMovies = computed(() => {
   return [...store.movies].slice(-3).reverse()
 })
 
-onMounted(() => {
+onMounted(async () => {
   if (store.movies.length === 0 || store.series.length === 0) {
-    store.fetchMedia()
+    await store.fetchMedia()
   }
 })
 </script>
