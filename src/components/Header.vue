@@ -2,10 +2,8 @@
   <v-app-bar app color="deep-purple-accent-4" dark>
     <v-toolbar-title>{{ $t('title') }}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn to="/" text>{{ $t('home') }}</v-btn>
-    <v-btn to="/favoritas" text>{{ $t('favorites') }}</v-btn>
-    <v-btn to="/admin" text>Admin</v-btn>
-    <v-btn to="/estadisticas" text>{{ $t('statistics') }}</v-btn>
+    <v-btn to="/admin" text>{{ $t('admin') }}</v-btn>
+    <v-spacer></v-spacer>
 
     <!-- Selector de idioma -->
     <v-btn text @click="$i18n.locale = 'es'">ES</v-btn>

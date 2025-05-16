@@ -15,14 +15,14 @@ import { createI18n } from 'vue-i18n'
 
 const messages = {
   es: {
-    title: 'Catálogo de Películas y Series',
+    title: 'Tu App de entreno',
     search_label: 'Buscar películas o series',
     no_results: 'No se encontraron resultados.',
     movies: 'Películas',
     series: 'Series',
     view_movies: 'Ver Películas',
     view_series: 'Ver Series',
-    favorites: 'Favoritas',
+    admin: 'Admin',
     statistics: 'Estadísticas',
     favorite_movies: 'Películas favoritas',
     favorite_series: 'Series favoritas',
@@ -48,7 +48,8 @@ const messages = {
     admin_series_list: 'Series',
   },
   en: {
-    title: 'Movie & Series Catalog',
+    title: 'Tu App de entreno',
+    admin: 'Admin',
     search_label: 'Search movies or series',
     no_results: 'No results found.',
     movies: 'Movies',
