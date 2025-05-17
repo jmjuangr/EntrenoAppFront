@@ -61,7 +61,7 @@ const dateAdapter = useDate()
 const descripcion = ref('')
 const duracion = ref(30)
 const intensidad = ref('')
-const fecha = ref<string>('')
+const fecha = ref(new Date().toISOString().substr(0, 10))
 const intensidades = ['baja', 'media', 'alta']
 const categoriaId = ref<number | null>(null)
 
@@ -84,15 +84,12 @@ onMounted(() => {
 async function submitEntrenamiento() {
   if (!store.usuarioActual || !categoriaId.value) return
 
-  const parsedDate = dateAdapter.parseISO(fecha.value)
-  const fechaFinal = dateAdapter.format(parsedDate, 'yyyy-MM-dd')
-
   await store.addEntrenamiento({
     usuarioId: store.usuarioActual.id,
     categoriaEntrenamientoId: categoriaId.value,
     descripcion: descripcion.value,
     duracion: duracion.value,
-    fecha: fechaFinal,
+    fecha: fecha.value,
     intensidad: intensidad.value,
     completado: false,
     puntosExperencia: 0,
