@@ -1,0 +1,9 @@
+@use 'variables' as *;
+@mixin sombra-suave {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 8px;
+}
+@mixin texto-claro {
+  color: $text-light;
+}

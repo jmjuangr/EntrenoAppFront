@@ -65,24 +65,21 @@ function required(v: string) {
 }
 
 async function onSubmit() {
-  console.log('Intento de login')
   if (!name.value || !pass.value) return
 
   loading.value = true
-  await store.fetchUsuarios()
+  try {
+    await store.loginUsuario(name.value, pass.value)
 
-  const usuario = store.usuarios.find((u) => u.nombre === name.value)
-
-  if (usuario && pass.value) {
     loading.value = false
-    if (usuario.admin) {
+    if (store.usuarioActual?.admin) {
       router.push('/admin')
     } else {
-      alert('Login correcto (usuario no admin)')
+      router.push('/mis-entrenos')
     }
-  } else {
-    alert('Usuario no encontrado o contraseña vacía')
+  } catch (error) {
     loading.value = false
+    alert('Credenciales incorrectas')
   }
 }
 </script>

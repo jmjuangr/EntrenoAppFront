@@ -1,16 +1,29 @@
 <template>
-  <v-app-bar app color="deep-purple-accent-4" dark>
-    <v-toolbar-title>{{ $t('title') }}</v-toolbar-title>
-    <v-spacer></v-spacer>
-    <v-btn to="/admin" text>{{ $t('admin') }}</v-btn>
-    <v-spacer></v-spacer>
+  <v-app-bar app color="grey-darken-3" dark>
+    <v-toolbar-title>Tu App de entreno</v-toolbar-title>
 
-    <!-- Selector de idioma -->
-    <v-btn text @click="$i18n.locale = 'es'">ES</v-btn>
-    <v-btn text @click="$i18n.locale = 'en'">EN</v-btn>
+    <v-spacer />
+
+    <!-- Botón de salir solo si hay usuario logueado -->
+    <v-btn v-if="store.token" text @click="logout">
+      Salir
+      <v-icon end>mdi-logout</v-icon>
+    </v-btn>
   </v-app-bar>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useEntrenosStore } from '../store/entreno'
+import { useRouter } from 'vue-router'
+
+const store = useEntrenosStore()
+const router = useRouter()
+
+function logout() {
+  store.token = ''
+  store.usuarioActual = null
+  router.push('/')
+}
+</script>
 
 <style scoped></style>

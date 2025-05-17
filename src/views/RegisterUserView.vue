@@ -4,12 +4,12 @@
       class="text-h5 mb-6 py-2 px-4 text-white"
       style="background-color: #6200ea; border-radius: 8px"
     >
-      {{ $t('Registro usuario') }}
+      Registro de usuario
     </h1>
 
     <v-row justify="center">
       <v-col cols="12" lg="6" md="8" sm="10">
-        <v-form v-model="formValid" @submit.prevent="submit">
+        <v-form ref="formRef" @submit.prevent="submit">
           <v-card>
             <v-card-text>
               <v-text-field
@@ -19,7 +19,6 @@
                 placeholder="Juan Pérez"
                 required
               />
-
               <v-text-field
                 v-model="edad"
                 :rules="edadRules"
@@ -28,12 +27,12 @@
                 placeholder="25"
                 required
               />
-
-              <v-text-field
-                v-model="genero"
+              <v-autocomplete
+                v-model="generoSeleccionado"
+                :items="generosDisponibles"
                 :rules="[required]"
                 label="Género"
-                placeholder="Masculino/Femenino/Otro"
+                placeholder="Selecciona tu género"
                 required
               />
 
@@ -45,7 +44,6 @@
                 placeholder="Ingresa tu contraseña"
                 required
               />
-
               <v-autocomplete
                 v-model="nivel"
                 :items="levels"
@@ -59,7 +57,7 @@
             <v-divider class="mt-4" />
 
             <v-card-actions>
-              <v-btn variant="text" @click="resetForm">Cancelar</v-btn>
+              <v-btn variant="text" @click="cancelar">Cancelar</v-btn>
               <v-spacer />
               <v-btn color="primary" type="submit" variant="elevated">Registrar</v-btn>
             </v-card-actions>
@@ -72,14 +70,18 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useEntrenosStore } from '../store/entreno'
 
 const store = useEntrenosStore()
+const router = useRouter()
 
-const formValid = ref(false)
+const formRef = ref()
+
 const name = ref('')
 const edad = ref<number | null>(null)
-const genero = ref('')
+const generoSeleccionado = ref('')
+const generosDisponibles = ['Femenino', 'Masculino', 'Otro']
 const pass = ref('')
 const nivel = ref('')
 const levels = ['Principiante', 'Intermedio', 'Avanzado']
@@ -94,19 +96,25 @@ const edadRules = [
 const resetForm = () => {
   name.value = ''
   edad.value = null
-  genero.value = ''
+  generoSeleccionado.value = ''
   nivel.value = ''
   pass.value = ''
-  formValid.value = false
+  formRef.value?.resetValidation()
+}
+
+const cancelar = () => {
+  resetForm()
+  router.push('/')
 }
 
 const submit = async () => {
-  if (!formValid.value) return
+  const { valid } = await formRef.value?.validate()
+  if (!valid) return
 
   const newUser = {
     nombre: name.value,
     edad: edad.value ?? 0,
-    genero: genero.value,
+    genero: generoSeleccionado.value,
     nivel: nivel.value,
     admin: false,
     pass: pass.value,
@@ -115,5 +123,6 @@ const submit = async () => {
   await store.addUsuario(newUser)
   alert('Usuario registrado correctamente')
   resetForm()
+  router.push('/')
 }
 </script>
