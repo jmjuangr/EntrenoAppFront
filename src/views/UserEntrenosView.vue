@@ -52,14 +52,16 @@
 import { ref, onMounted, computed } from 'vue'
 import { useEntrenosStore } from '../store/entreno'
 import EntrenoCard from '../components/EntrenoCard.vue'
+import { useDate } from 'vuetify'
 
 const store = useEntrenosStore()
+const dateAdapter = useDate()
 
 // Campos del formulario
 const descripcion = ref('')
 const duracion = ref(30)
 const intensidad = ref('')
-const fecha = ref(new Date().toISOString().substr(0, 10))
+const fecha = ref<string>('')
 const intensidades = ['baja', 'media', 'alta']
 const categoriaId = ref<number | null>(null)
 
@@ -67,7 +69,6 @@ const categoriaId = ref<number | null>(null)
 const eventos = computed(() =>
   store.entrenamientos
     .filter((e) => e.usuarioId === store.usuarioActual?.id)
-
     .map((e) => ({
       title: e.descripcion,
       start: e.fecha,
@@ -83,12 +84,15 @@ onMounted(() => {
 async function submitEntrenamiento() {
   if (!store.usuarioActual || !categoriaId.value) return
 
+  const parsedDate = dateAdapter.parseISO(fecha.value)
+  const fechaFinal = dateAdapter.format(parsedDate, 'yyyy-MM-dd')
+
   await store.addEntrenamiento({
     usuarioId: store.usuarioActual.id,
     categoriaEntrenamientoId: categoriaId.value,
     descripcion: descripcion.value,
     duracion: duracion.value,
-    fecha: fecha.value,
+    fecha: fechaFinal,
     intensidad: intensidad.value,
     completado: false,
     puntosExperencia: 0,
@@ -99,7 +103,8 @@ async function submitEntrenamiento() {
   duracion.value = 30
   intensidad.value = ''
   categoriaId.value = null
+  fecha.value = ''
 
-  await store.fetchEntrenamientos() // ← vuelve a cargar los eventos
+  await store.fetchEntrenamientos()
 }
 </script>

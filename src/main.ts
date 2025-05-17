@@ -9,10 +9,14 @@ import '@mdi/font/css/materialdesignicons.css'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import DateFnsAdapter from '@date-io/date-fns'
 
 const vuetify = createVuetify({
   components,
   directives,
+  date: {
+    adapter: new DateFnsAdapter(),
+  },
 })
 
 const app = createApp(App)
