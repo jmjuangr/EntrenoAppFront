@@ -1,0 +1,43 @@
+{
+  "name": "catalogo-peliculas",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@date-io/date-fns": "^3.2.1",
+    "@date-io/dayjs": "^3.2.0",
+    "@mdi/font": "^7.4.47",
+    "chart.js": "^3.9.1",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
+    "pinia": "^3.0.1",
+    "sass-loader": "^13.3.3",
+    "vue": "^3.5.13",
+    "vue-chart-3": "^3.1.8",
+    "vue-i18n": "^10.0.7",
+    "vue-router": "^4.5.0",
+    "vuetify": "^3.8.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/node": "^22.14.1",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "eslint": "^9.22.0",
+    "eslint-plugin-vue": "~10.0.0",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3",
+    "sass": "^1.87.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.2.4",
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vue-tsc": "^2.2.10"
+  }
+}
